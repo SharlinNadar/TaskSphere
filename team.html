@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Team - Task Manager</title>
+  <link rel="stylesheet" href="team.css" />
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="logo">TaskSphere</div>
+    <ul class="nav-links">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="tasks.html">Tasks</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="team.html" class="active">Team</a></li>
+      <li><a href="#" id="logout">Logout</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="team-section">
+  <h1>Meet Your Team</h1>
+
+  <!-- Existing Teams -->
+  <section class="team-list">
+    <h2>Your Teams</h2>
+    <div id="team-container" class="team-grid">
+      <!-- Dynamic teams will be inserted here -->
+    </div>
+  </section>
+
+  <!-- Create New Team -->
+  <section class="create-team">
+    <h2>Create a New Team</h2>
+    <form id="create-team-form">
+      <div class="form-group">
+        <label for="team-name">Team Name:</label>
+        <input type="text" id="team-name" name="team-name" placeholder="Enter team name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="team-description">Description:</label>
+        <textarea id="team-description" name="team-description" placeholder="Enter a short description" required></textarea>
+      </div>
+
+      <h3>Add Team Members</h3>
+      <div id="members-input-container">
+        <div class="member-input">
+          <input type="text" name="member-name[]" placeholder="Member Name" required />
+          <input type="text" name="member-role[]" placeholder="Role" required />
+        </div>
+      </div>
+      <button type="button" id="add-member-btn">+ Add Member</button>
+
+      <h4>Members Preview:</h4>
+      <ul id="members-list-preview">
+        <!-- List of added members will appear here -->
+      </ul>
+
+      <button type="submit" id="create-team-btn">Create Team</button>
+    </form>
+  </section>
+
+  <!-- Team Details Modal -->
+  <div id="team-details-modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close" aria-label="Close modal">&times;</button>
+      <h3>Team Details</h3>
+      <div id="team-info">
+        <!-- Detailed team info will be inserted dynamically -->
+      </div>
+      <button id="delete-team-btn" class="danger-btn">Delete Team</button>
+    </div>
+  </div>
+</main>
+
+<!-- Reusable Message Modal -->
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <button class="close-btn" aria-label="Close message">&times;</button>
+    <p id="modal-message">Modal Message</p>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 Task Management Tool</p>
+</footer>
+
+<!-- Firebase + Scripts -->
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="team.js"></script>
+
+</body>
+</html>

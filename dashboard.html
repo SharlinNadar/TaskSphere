@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Task Manager</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<header>
+    <nav class="navbar">
+        <div class="logo">TaskSphere</div>
+        <ul>
+            <li><a href="tasks.html">Tasks</a></li>
+            <li><a href="team.html">Team</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="dashboard">
+    <h1>Welcome, <span id="user-name">User</span></h1>
+    <h3>Your Role: <span id="user-role">Loading...</span></h3>
+    
+    <!-- <button id="create-task-btn" class="btn">+ Create Task</button> -->
+
+    <div class="dashboard-grid">
+        <div class="card">
+            <h2>Task Overview</h2>
+            <p>Pending: <span id="pending-tasks">0</span></p>
+            <p>Completed: <span id="completed-tasks">0</span></p>
+            <p>In Progress: <span id="inprogress-tasks">0</span></p>
+            <div class="progress-bar">
+                <div id="progress-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Notifications</h2>
+            <ul id="notifications">
+                <li>Loading...</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Team Collaboration</h2>
+            <p>Join discussions, track progress, and work together.</p>
+            <a href="team.html" class="btn">Go to Team</a>
+        </div>
+        <div class="card">
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="tasks.html">Manage Tasks</a></li>
+                <li><a href="calendar.html">View Calendar</a></li>
+                <li><a href="reports.html">Generate Reports</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Create Task Modal -->
+<div id="create-task-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Create New Task</h2>
+        <form id="create-task-form">
+            <label for="task-title">Title:</label>
+            <input type="text" id="task-title" name="task-title" required>
+            
+            <label for="task-desc">Description:</label>
+            <textarea id="task-desc" name="task-desc" required></textarea>
+            
+            <label for="task-status">Status:</label>
+            <select id="task-status" name="task-status" required>
+                <option value="pending">Pending</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+            </select>
+            
+            <button type="submit" class="btn">Add Task</button>
+        </form>
+    </div>
+</div>
+<footer>
+    <p>&copy; 2025 Task Management Tool</p>
+</footer>
+
+<script type="module" src="dashboard.js"></script>
+
+</body>
+</html>
