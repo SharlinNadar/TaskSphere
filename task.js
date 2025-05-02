@@ -1,6 +1,6 @@
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore, collection, getDocs, query, where, doc, getDoc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-import { app } from "./firebase-config.js";
+import { app } from "./firebase-config.js";  // Firebase config file
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -8,14 +8,14 @@ const db = getFirestore(app);
 // Get the status modal and message elements
 const statusModal = document.getElementById("status-modal");
 const modalMessage = document.getElementById("status-message");
-const closeModal = document.querySelector(".status-modal .close-btn");
+const closeStatusModal = document.querySelector(".status-modal .close-btn");
 
 // Function to show the status modal with a message
 function showStatusModal(message) {
     modalMessage.textContent = message;
     statusModal.style.display = "block"; // Show the modal
 
-    closeModal.addEventListener("click", () => {
+    closeStatusModal.addEventListener("click", () => {
         statusModal.style.display = "none"; // Close modal on click of close button
     });
 
@@ -67,16 +67,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Logout functionality
-document.getElementById("logout").addEventListener("click", () => {
-    signOut(auth).then(() => {
-        window.location.href = "login.html"; 
-    }).catch((error) => {
-        console.error("Logout failed:", error);
-    });
-});
-
-// Modal functionality
+// Modal functionality for creating/editing task
 const createTaskBtn = document.getElementById("create-task-btn");
 const modal = document.getElementById("create-task-modal");
 const closeModalInCreateTask = document.querySelector(".modal .close");

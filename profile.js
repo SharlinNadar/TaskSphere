@@ -1,5 +1,5 @@
 import { auth, db } from './firebase-config.js';
-import { doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
+import { doc, getDoc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
 
 const usernameEl = document.getElementById('username');
 const userRoleEl = document.getElementById('user-role');
@@ -10,7 +10,7 @@ const nameInput = document.getElementById('edit-name');
 const roleInput = document.getElementById('edit-role');
 const emailInput = document.getElementById('edit-email');
 
-let currentUserData = {}; // Store fetched data for comparison
+let currentUserData = {};
 
 // Load Profile
 auth.onAuthStateChanged(async (user) => {
@@ -21,19 +21,28 @@ auth.onAuthStateChanged(async (user) => {
 
       if (docSnap.exists()) {
         currentUserData = docSnap.data();
-
-        usernameEl.textContent = currentUserData.fullName || 'No Name';
-        userRoleEl.textContent = currentUserData.role || 'No Role';
-        userEmailEl.textContent = user.email;
-
-        nameInput.value = currentUserData.fullName || '';
-        roleInput.value = currentUserData.role || '';
-        emailInput.value = user.email;
       } else {
-        Swal.fire('Error', 'User data not found!', 'error');
+        // Document does not exist, create it
+        currentUserData = {
+          fullName: user.displayName || 'New User',
+          role: 'Participant',
+          email: user.email
+        };
+        await setDoc(userRef, currentUserData);
+        console.log('New user document created.');
       }
+
+      // Populate UI
+      usernameEl.textContent = currentUserData.fullName || 'No Name';
+      userRoleEl.textContent = currentUserData.role || 'No Role';
+      userEmailEl.textContent = user.email;
+
+      nameInput.value = currentUserData.fullName || '';
+      roleInput.value = currentUserData.role || '';
+      emailInput.value = user.email;
+
     } catch (error) {
-      console.error(error);
+      console.error('Error loading profile:', error);
       Swal.fire('Error', 'Failed to load profile data.', 'error');
     }
   } else {
@@ -41,7 +50,7 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
-// Toggle Form with updated values
+// Toggle Edit Form
 editBtn.addEventListener('click', () => {
   nameInput.value = currentUserData.fullName || '';
   roleInput.value = currentUserData.role || '';
@@ -50,7 +59,7 @@ editBtn.addEventListener('click', () => {
   editForm.style.display = editForm.style.display === 'none' ? 'block' : 'none';
 });
 
-// Save Changes
+// Save Profile Changes
 editForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -78,9 +87,18 @@ editForm.addEventListener('submit', async (e) => {
 
   try {
     const userRef = doc(db, 'users', auth.currentUser.uid);
-    await updateDoc(userRef, updates);
+    const docSnap = await getDoc(userRef);
 
-    // Update UI and memory
+    if (docSnap.exists()) {
+      await updateDoc(userRef, updates);
+    } else {
+      await setDoc(userRef, {
+        ...updates,
+        email: auth.currentUser.email
+      });
+    }
+
+    // Update UI and local memory
     if (updates.fullName) {
       usernameEl.textContent = updates.fullName;
       currentUserData.fullName = updates.fullName;
@@ -93,7 +111,7 @@ editForm.addEventListener('submit', async (e) => {
     editForm.style.display = 'none';
     Swal.fire('Success', 'Profile updated successfully!', 'success');
   } catch (error) {
-    console.error(error);
+    console.error('Error updating profile:', error);
     Swal.fire('Error', 'Failed to update profile.', 'error');
   }
 });
